@@ -11,8 +11,8 @@ from models import storage
 from os import getenv
 
 app = Flask(__name__)
-app.register_blueprint(app_views)
 CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
+app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown(exception):
@@ -27,4 +27,6 @@ def error(e):
     return make_response({"error": "Not found"}, 404)
 
 if __name__ == "__main__":
-    app.run(getenv("HBNB_API_HOST"), getenv("HBNB_API_PORT"))
+    host = getenv("HBNB_API_HOST", 'localhost')
+    port = getenv("HBNB_API_PORT", '0.0.0.0')
+    app.run(host=host, port=port, threaded=True)
