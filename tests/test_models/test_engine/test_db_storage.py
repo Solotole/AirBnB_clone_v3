@@ -86,3 +86,64 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+
+class TestDbStorageCount(unittest.TestCase):
+    """ Test newly introduced count method """
+    def test_count_one_method(self):
+        """ testing count method in the storage engine with 1 addition"""
+        storage = DBStorage()
+        new_dict = {'name': 'Miami'}
+        instance = classes['State'](**new_dict)
+        storage.new(instance)
+        storage.save()
+        self.assertEqual(storage.count(), 1)
+        self.assertEqual(storage.count(classes['State']), 1)
+        storage.delete(instance)
+
+    def tets_count_2_method(self):
+        """ testing count method in the storage engine with 2 addition """
+        storage = DBStorage()
+        new_dict = {'name': 'Carlifornia'}
+        instance = classes['State'](**new_dict)
+        storage.new(instance)
+        storage.save()
+        new_city_instance = {'state_id': str(new_dict.id), 'name' = 'Mtwapa'}
+        city = classes['City'](**new_city_instance)
+        storage.new(city)
+        storage.save()
+        self.assertEqual(storage.count(), 2)
+        self.assertEqual(storage.count(classes['State']), 1)
+
+
+class TestDbStorageGet(unittest.TestCase):
+    """ Test newly intriduced get method """
+    def test_get_one_method(self):
+        """ testing get method in engine with an addtion in the database """
+        storage = DBStorage()
+        new_dict = {'name': 'Carlifornia'}
+        instance = classes['State'](**new_dict)
+        storage.new(instance)
+        storage.save()
+        identity = new_dict['id']
+        self.assertEqual(
+            list(storage.all(classes['State'].values()))[0].id, identity
+        )
+        self.assertEqual(
+            storage.get(classes['State'], identity),
+            storage.all(classes['State']).values()
+        )
+
+    def test_get_none_method(self):
+        """ testing get method with non-existing object """
+        storage = DBStorage()
+        new_dict = {'name': 'Carlifornia'}
+        instance = classes['State'](**new_dict)
+        storage.new(instance)
+        storage.save()
+        new_city_instance = {'state_id': str(new_dict.id), 'name' = 'Mtwapa'}
+        city = classes['City'](**new_city_instance)
+        storage.new(city)
+        storage.save()
+        identity = new_city_instance['id']
+        self.assertEqual(storage.get(classes['State'], identity), None)
