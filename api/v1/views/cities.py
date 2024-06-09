@@ -82,7 +82,7 @@ def put_method(city_id):
     dictionary_c = storage.get(classes['City'], city_id)
     if not dictionary_c:
         abort(404)
-    if not request.get_json:
+    if not request.get_json():
         abort(400, description='Not a JSON')
     ignore_list = ['id', 'state_id', 'created_at', 'updated_at']
     for keys, values in dict_object.items():
