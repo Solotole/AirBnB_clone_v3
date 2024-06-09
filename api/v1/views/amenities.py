@@ -10,7 +10,7 @@ classes = {"Amenity": Amenity}
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
-def getting_all_objects(self):
+def getting_all_objects():
     """ getting a list of all objects """
     dict_amenity = {}
     dict_amenity = storage.all(classes['Amenity'])
