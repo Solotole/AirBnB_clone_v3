@@ -7,17 +7,18 @@ from flask import abort, jsonify, make_response, request
 from models import storage as s
 from models.state import State
 
+
 @app_views.route("/states", methods=["GET"], strict_slashes=False)
 def define_state():
     """
     return the list of states
     """
     state_list = []
-    state_obj = storage.all("State")
+    state_obj = s.all(State)
     for obj in state_obj.values():
         state_list.append(obj.to_json())
-
     return jsonify(state_list)
+
 
 @app_views.route("/states", methods=["POST"], strict_slashes=False)
 def creat_state():
@@ -27,16 +28,12 @@ def creat_state():
     """
     state_json = request.get_json(silent=True)
     if state_json is None:
-        abort(400, 'Not a JSON')
+        abort(400, description='Not a JSON')
     if "name" not in state_json:
-        abort(400, 'Missing name')
-
+        abort(400, description='Missing name')
     new_state = State(**state_json)
     new_state.save()
-    resp = jsonify(new_state.to_json())
-    resp.status_code = 201
-
-    return resp
+    return jsonify(new_state.to_json()), 201
 
 
 @app_views.route("/states/<state_id>",  methods=["GET"], strict_slashes=False)
@@ -46,12 +43,9 @@ def state_by_id(state_id):
     :param state_id: state object id
     :return: state obj with the specified id or error
     """
-
-    fetched_obj = storage.get("State", str(state_id))
-
-    if fetched_obj is None:
+    fetched_obj = s.get(State, state_id)
+    if not fetched_obj:
         abort(404)
-
     return jsonify(fetched_obj.to_json())
 
 
@@ -61,31 +55,27 @@ def state_put(state_id):
     updates specific State object by ID
     """
     state_json = request.get_json(silent=True)
-    if state_json is None:
-        abort(400, 'Not a JSON')
-    fetched_obj = storage.get("State", str(state_id))
-    if fetched_obj is None:
+    if not request.get_json():
+        abort(400, description='Not a JSON')
+    fetched_obj = s.get(State, state_id)
+    if not fetched_obj:
         abort(404)
     for key, val in state_json.items():
         if key not in ["id", "created_at", "updated_at"]:
             setattr(fetched_obj, key, val)
     fetched_obj.save()
-    return jsonify(fetched_obj.to_json())
+    return jsonify(fetched_obj.to_json()), 200
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
                  strict_slashes=False)
 def state_delete(state_id):
     """
-    deletes State by id 
+    deletes State by id
     """
-
-    fetched_obj = storage.get("State", str(state_id))
-
-    if fetched_obj is None:
+    fetched_obj = s.get(State, state_id)
+    if not fetched_obj:
         abort(404)
-
-    storage.delete(fetched_obj)
-    storage.save()
-
-    return jsonify({})
+    s.delete(fetched_obj)
+    s.save()
+    return jsonify({}), 200
