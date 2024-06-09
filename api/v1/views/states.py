@@ -33,7 +33,7 @@ def creat_state():
         abort(400, description='Missing name')
     new_state = State(**state_json)
     new_state.save()
-    return jsonify(new_state.to_dict()), 201
+    return make_response(jsonify(new_state.to_dict()), 201)
 
 
 @app_views.route("/states/<state_id>",  methods=["GET"], strict_slashes=False)
@@ -64,7 +64,7 @@ def state_put(state_id):
         if key not in ["id", "created_at", "updated_at"]:
             setattr(fetched_obj, key, val)
     fetched_obj.save()
-    return jsonify(fetched_obj.to_dict()), 200
+    return make_response(jsonify(fetched_obj.to_dict()), 200)
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
@@ -78,4 +78,4 @@ def state_delete(state_id):
         abort(404)
     s.delete(fetched_obj)
     s.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
