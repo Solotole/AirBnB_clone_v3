@@ -45,7 +45,8 @@ def retrive_reviews(review_id):
         return jsonify(review_object.to_dict())
 
 
-@app_views.route("/reviews/<review_id>", methods=['DELETE'], strict_slashes=False)
+@app_views.route("/reviews/<review_id>", methods=['DELETE'],
+                 strict_slashes=False)
 def deleting_review(review_id):
     """ method to delete review objects according to review_id """
     review_object = storage.get(classes['Review'], review_id)
