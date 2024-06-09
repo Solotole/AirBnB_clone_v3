@@ -113,3 +113,116 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+
+class TestCout(unittest.TestCase):
+    """ Test class for the count method """
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_total_count(self):
+        """ test of total count of all objects """
+        if os.path.exists("file.json"):
+            os.remove('file.json')
+        storage = FileStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = new_dict
+        storage.save()
+        FileStorage._FileStorage__objects = save
+        self.assertEqual(storage.count(), 7)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_one(self):
+        """ testing of one class """
+        if os.path.exists("file.json"):
+            os.remove('file.json')
+        storage = FileStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = new_dict
+        storage.save()
+        FileStorage._FileStorage__objects = save
+        self.assertEqual(storage.count(), 7)
+        self.assertEqual(storage.count(State), 1)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_one(self):
+        """ testing of one class """
+        if os.path.exists("file.json"):
+            os.remove('file.json')
+        storage = FileStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        instance = classes['State']()
+        instance_key = instance.__class__.__name__ + "." + instance.id
+        new_dict[instance_key] = instance
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = new_dict
+        storage.save()
+        FileStorage._FileStorage__objects = save
+        self.assertEqual(storage.count(), 7)
+        self.assertEqual(storage.count(State), 2)
+
+
+class TestGetMethod(unittest.TestCase):
+    """ testing newly intoduced get method """
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get_state(self):
+        """ testing get method on state """
+        if os.path.exists("file.json"):
+            os.remove('file.json')
+        storage = FileStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = new_dict
+        storage.save()
+        for key in instance:
+            if key.startswith('State'):
+                value = instance[key]
+                break
+        d = value['id']
+        self.assertEqual(
+            list(storage.all(classes['State']).values())[0].id, d
+        )
+        self.assertEqual(
+            storage.get(classes['State'], value['id']),
+            value
+        )
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get_state(self):
+        """ not found object """
+        if os.path.exists("file.json"):
+            os.remove('file.json')
+        storage = FileStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = new_dict
+        storage.save()
+        for key in instance:
+            if key.startswith('City'):
+                value = instance[key]
+                break
+        d = value['id']
+        self.assertNotEqual(
+            list(storage.all(classes['State']).values())[0].id, d
+        )
+        self.assertEqual(storage.get(classes['State'], value['id']), None)
