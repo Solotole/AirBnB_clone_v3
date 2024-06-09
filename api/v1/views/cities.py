@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-""" city REST API module definition """
+""" city REST API module definition
+"""
 from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from models import storage
@@ -76,13 +77,13 @@ def posting_city(state_id):
 
 
 @app_views.route("/cities/<city_id>", methods=['PUT'], strict_slashes=False)
-def put_method(city_id):
+def putting_method(city_id):
     """ put city object into the database """
     dict_object = request.get_json()
     dictionary_c = storage.get(classes['City'], city_id)
     if not dictionary_c:
         abort(404)
-    if not request.get_json:
+    if not request.get_json():
         abort(400, description='Not a JSON')
     ignore_list = ['id', 'state_id', 'created_at', 'updated_at']
     for keys, values in dict_object.items():
