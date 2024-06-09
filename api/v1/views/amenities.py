@@ -22,7 +22,7 @@ def getting_all_objects(self):
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'],
                  strict_slashes=False)
-def retrieve_city(amenity_id):
+def retrieve_amenity(amenity_id):
     """ retrieve a city object """
     amenity_object = {}
     amenity_object = storage.get(classes['Amenity'], amenity_id)
