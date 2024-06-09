@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-""" city REST API module definition """
+""" city REST API module definition
+"""
 from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from models import storage
