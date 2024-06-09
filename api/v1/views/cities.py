@@ -54,7 +54,7 @@ def deleting_city(city_id):
     elif dictionary_c:
         storage.delete(dictionary_c)
         storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route("/states/<state_id>/cities", methods=['POST'],
@@ -72,11 +72,11 @@ def posting_city(state_id):
     instance_one = classes['City'](**dict_object)
     instance_one.state_id = dictionary.id
     instance_one.save()
-    return jsonify(instance_one.to_dict()), 201
+    return make_response(jsonify(instance_one.to_dict()), 201)
 
 
 @app_views.route("/cities/<city_id>", methods=['PUT'], strict_slashes=False)
-def put_method(city_id):
+def putting_method(city_id):
     """ put city object into the database """
     dict_object = request.get_json()
     dictionary_c = storage.get(classes['City'], city_id)
@@ -89,4 +89,4 @@ def put_method(city_id):
         if keys not in ignore_list:
             setattr(dictionary_c, keys, values)
     storage.save()
-    return jsonify(dictionary_c.to_dict()), 200
+    return make_response(jsonify(dictionary_c.to_dict()), 200)
