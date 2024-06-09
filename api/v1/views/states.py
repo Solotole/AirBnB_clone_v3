@@ -16,7 +16,7 @@ def define_state():
     state_list = []
     state_obj = s.all(State)
     for obj in state_obj.values():
-        state_list.append(obj.to_json())
+        state_list.append(obj.to_dict())
     return jsonify(state_list)
 
 
@@ -33,7 +33,7 @@ def creat_state():
         abort(400, description='Missing name')
     new_state = State(**state_json)
     new_state.save()
-    return jsonify(new_state.to_json()), 201
+    return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route("/states/<state_id>",  methods=["GET"], strict_slashes=False)
@@ -46,7 +46,7 @@ def state_by_id(state_id):
     fetched_obj = s.get(State, state_id)
     if not fetched_obj:
         abort(404)
-    return jsonify(fetched_obj.to_json())
+    return jsonify(fetched_obj.to_dict())
 
 
 @app_views.route("/states/<state_id>",  methods=["PUT"], strict_slashes=False)
@@ -64,7 +64,7 @@ def state_put(state_id):
         if key not in ["id", "created_at", "updated_at"]:
             setattr(fetched_obj, key, val)
     fetched_obj.save()
-    return jsonify(fetched_obj.to_json()), 200
+    return jsonify(fetched_obj.to_dict()), 200
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
