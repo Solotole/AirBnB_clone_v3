@@ -18,7 +18,8 @@ def getting_all_objects(self):
     return jsonify(all_amenity)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+                 strict_slashes=False)
 def retrieve_city(amenity_id):
     """ retrieve a city object """
     amenity_object = {}
@@ -29,7 +30,8 @@ def retrieve_city(amenity_id):
         return jsonify(amenity_object.to_dict())
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def deleting_amenity_object(amenity_id):
     """ deleting an amenity object based on its id """
     amenity_object = {}
@@ -42,7 +44,8 @@ def deleting_amenity_object(amenity_id):
     return jsonify({}), 200
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['POST'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['POST'],
+                 strict_slashes=False)
 def posting_new_object(amenity_id):
     """ posting of a new amenity """
     amenity_object = request.get_json()
@@ -55,7 +58,8 @@ def posting_new_object(amenity_id):
     return jsonify(amenity_instance.to_dict()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
+                 strict_slashes=False)
 def putting_amenity_object(amenity_id):
     """ updating existing amenity object """
     amenity_object = request.get_json()
