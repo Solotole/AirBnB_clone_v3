@@ -64,7 +64,7 @@ def state_put(state_id):
     for keys, vals in state_request.items():
         if keys not in ["id", "created_at", "updated_at"]:
             setattr(fetched, keys, vals)
-    fetched.save()
+    s.save()
     return jsonify(fetched.to_dict()), 200
 
 
@@ -77,6 +77,7 @@ def state_delete(state_id):
     fetched = s.get(State, state_id)
     if not fetched:
         abort(404)
-    s.delete(fetched)
-    s.save()
+    if fetched:
+        s.delete(fetched)
+        s.save()
     return jsonify({}), 200
