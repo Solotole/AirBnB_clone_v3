@@ -35,7 +35,7 @@ def retrieve_amenity(amenity_id):
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 def deleting_amenity_object(amenity_id):
-    """ deleting an amenity object based on its id """
+   """ deleting an amenity object based on its id """
     amenity_object = {}
     amenity_object = storage.get(classes['Amenity'], amenity_id)
     if not amenity_object:
@@ -51,7 +51,7 @@ def new_new_object():
     """ posting of a new amenity """
     amenity_object = request.get_json()
     if not request.get_json():
-        abort(400, description='Not JSON')
+        abort(400, description='Not a JSON')
     if 'name' not in amenity_object:
         abort(400, description='Missing name')
     amenity_instance = classes['Amenity'](**amenity_object)
