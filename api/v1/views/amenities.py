@@ -38,9 +38,8 @@ def deleting_amenity_object(amenity_id):
     amenity_object = storage.get(classes['Amenity'], amenity_id)
     if not amenity_object:
         abort(404)
-    if amenity_object:
-        storage.delete(amenity_object)
-        storage.save()
+    storage.delete(amenity_object)
+    storage.save()
     return make_response(jsonify({}), 200)
 
 
