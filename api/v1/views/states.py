@@ -14,8 +14,8 @@ def define_state():
     return the list of states
     """
     states = []
-    states = s.all(State)
-    for obj in states.values():
+    states_obj = s.all(State)
+    for obj in states_obj.values():
         states.append(obj.to_dict())
     return jsonify(states)
 
