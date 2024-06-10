@@ -45,7 +45,8 @@ def retrive_place(place_id):
         return jsonify(place_object.to_dict())
 
 
-@app_views.route("/places/<place_id>", methods=['DELETE'], strict_slashes=False)
+@app_views.route("/places/<place_id>", methods=['DELETE'],
+                 strict_slashes=False)
 def deleting_place(place_id):
     """ method to delete place objects according to place id """
     place_object = storage.get(classes['Place'], place_id)
@@ -59,7 +60,7 @@ def deleting_place(place_id):
 
 @app_views.route("/cities/<city_id>/places", methods=['POST'],
                  strict_slashes=False)
-def posting_place_method(state_id):
+def posting_place_method(city_id):
     """ posting place object """
     place = request.get_json()
     city = storage.get(classes['City'], city_id)
@@ -95,4 +96,4 @@ def put_place_method(place_id):
         if keys not in ignore_list:
             setattr(place_object, keys, values)
     storage.save()
-    return jsonify(place_obect.to_dict()), 200
+    return jsonify(place_object.to_dict()), 200
