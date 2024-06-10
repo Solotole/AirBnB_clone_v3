@@ -76,7 +76,7 @@ def posting_place(place_id):
     if not user:
         abort(404)
     instance_review = classes['Review'](**dict_object)
-    instance_review.['place_id'] = place.id
+    instance_review['place_id'] = place_id
     instance_review.save()
     return jsonify(instance_review.to_dict()), 201
 
