@@ -29,7 +29,8 @@ def retrieve_place_reviews(place_id):
     all_list = []
     if dictionary:
         for key in dictionary.reviews:
-            all_list.append(key.to_dict())
+            if key.place_id == place_id:
+                all_list.append(key.to_dict())
     elif not dictionary:
         abort(404)
     return jsonify(all_list)
@@ -63,11 +64,11 @@ def deleting_review(review_id):
 def posting_place(place_id):
     """ posting place object """
     dict_object = request.get_json()
-    place = storage.get(classes['Place'], place_id)
-    if not dictionary:
-        abort(404)
-    if not request.get_json():
+    if request.get_json() is None:
         abort(400, description='Not a JSON')
+    place = storage.get(classes['Place'], place_id)
+    if not place:
+        abort(404)
     if 'text' not in dict_object:
         abort(400, description='Missing text')
     if 'user_id' not in dict_object:
@@ -76,8 +77,7 @@ def posting_place(place_id):
     if not user:
         abort(404)
     instance_review = classes['Review'](**dict_object)
-    instance_review.user_id = user.id
-    instance_review.place_id = place.id
+    instance_review.['place_id'] = place.id
     instance_review.save()
     return jsonify(instance_review.to_dict()), 201
 
@@ -92,8 +92,8 @@ def put_method(review_id):
     if not request.get_json():
         abort(400, description='Not a JSON')
     ignore_list = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
-    for keys, values in dict_object.items():
-        if keys not in ignore_list:
-            setattr(review_object, keys, values)
+    for k, val in dict_object.items():
+        if k not in ignore_list:
+            setattr(review_object, k, val)
     storage.save()
     return jsonify(review_object.to_dict()), 200
