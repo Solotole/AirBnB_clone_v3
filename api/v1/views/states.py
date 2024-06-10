@@ -56,14 +56,14 @@ def state_put(state_id):
     state_request = request.get_json(silent=True)
     if not request.get_json():
         abort(400, description='Not a JSON')
-    fetched_obj = s.get(State, state_id)
-    if not fetched_obj:
+    fetched = s.get(State, state_id)
+    if not fetched:
         abort(404)
-    for key, val in state_json.items():
+    for key, val in state_request.items():
         if key not in ["id", "created_at", "updated_at"]:
-            setattr(fetched_obj, key, val)
-    fetched_obj.save()
-    return jsonify(fetched_obj.to_dict()), 200
+            setattr(fetched, key, val)
+    fetched.save()
+    return jsonify(fetched.to_dict()), 200
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
@@ -72,9 +72,9 @@ def state_delete(state_id):
     """
     deletes State by id
     """
-    fetched_obj = s.get(State, state_id)
-    if not fetched_obj:
+    fetched = s.get(State, state_id)
+    if not fetched:
         abort(404)
-    s.delete(fetched_obj)
+    s.delete(fetched)
     s.save()
     return jsonify({}), 200
