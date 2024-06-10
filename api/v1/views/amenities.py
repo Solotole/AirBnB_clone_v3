@@ -13,10 +13,11 @@ classes = {"Amenity": Amenity}
 def getting_all_objects():
     """ getting a list of all objects """
     dict_amenity = {}
-    dict_amenity = storage.all(classes['Amenity']).all()
+    dict_amenity = storage.all(classes['Amenity'])
     all_amenity = []
     if dict_amenity:
-        all_amenity.append(dict_amenity.to_dict())
+        for key in dict_amenity.values():
+            all_amenity.append(key.to_dict())
     return jsonify(all_amenity)
 
 
@@ -46,23 +47,23 @@ def deleting_amenity_object(amenity_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['POST'],
-                 strict_slashes=False)
-def posting_new_object(amenity_id):
+@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+def new_new_object():
     """ posting of a new amenity """
     amenity_object = request.get_json()
     if not request.get_json():
         abort(400, description='Not JSON')
     if 'name' not in amenity_object:
-        abort(400, description='Misiing name')
+        abort(400, description='Missing name')
     amenity_instance = classes['Amenity'](**amenity_object)
-    amenity_instance.save()
-    return make_response(jsonify(amenity_instance.to_dict()), 201)
+    storage.new(amenity_instance)
+    storage.save()
+    return jsonify(amenity_instance.to_dict()), 201
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
-def putting_amenity_object(amenity_id):
+def put_amenity_object(amenity_id):
     """ updating existing amenity object """
     amenity_object = request.get_json()
     existing_object = {}
