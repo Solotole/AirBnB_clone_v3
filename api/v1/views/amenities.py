@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""module defining routes for amenity class
-"""
+"""module defining routes for amenity class"""
 from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from models import storage
