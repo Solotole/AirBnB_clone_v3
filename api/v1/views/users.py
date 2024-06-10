@@ -8,13 +8,14 @@ classes = {"User": User}
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
-def getting_all_user_objects(self):
+def getting_all_user_objects():
     """ getting a list of all objects """
     dict_user = {}
     dict_user = storage.all(classes['User'])
     all_user = []
     if dict_user:
-        all_user.append(dict_user)
+        for user in dict_user.values():
+            all_user.append(user.to_dict())
     return jsonify(all_user)
 
 
@@ -22,7 +23,7 @@ def getting_all_user_objects(self):
 def retrieve_users(user_id):
     """ retrieve a user object """
     user_object = {}
-    iser_object = storage.get(classes['User'], user_id)
+    user_object = storage.get(classes['User'], user_id)
     if not user_object:
         abort(404)
     if user_object:
@@ -42,8 +43,8 @@ def deleting_user_object(user_id):
     return jsonify({}), 200
 
 
-@app_views.route('/users/<user_id>', methods=['POST'], strict_slashes=False)
-def posting_user_object(amenity_id):
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
+def posting_user_object():
     """ posting of a new user data """
     user_object = request.get_json()
     if not request.get_json():
@@ -72,4 +73,4 @@ def putting_user_object(user_id):
         if keys not in ignore_list:
             setattr(existing_object, keys, values)
     storage.save()
-    return jsonify(user_object.to_dict()), 200
+    return jsonify(existing_object.to_dict()), 200
