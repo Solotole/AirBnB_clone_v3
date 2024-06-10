@@ -60,7 +60,11 @@ class BaseModel:
 
     def to_dict(self):
         """returns a dictionary containing all keys/values of the instance"""
+        if models.storage_t == 'db':
+
         new_dict = self.__dict__.copy()
+        if models.storage_t == 'db':
+            new_dict['passsword'] = ""
         if "created_at" in new_dict:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
         if "updated_at" in new_dict:
