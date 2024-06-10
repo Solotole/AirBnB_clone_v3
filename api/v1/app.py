@@ -30,6 +30,10 @@ def error(e):
 
 
 if __name__ == "__main__":
-    host = getenv("HBNB_API_HOST", 'localhost')
-    port = getenv("HBNB_API_PORT", '0.0.0.0')
+    host = getenv("HBNB_API_HOST")
+    port = getenv("HBNB_API_PORT")
+    if not host:
+        host = 'localhost'
+    if not port:
+        port = '0.0.0.0'
     app.run(host=host, port=port, threaded=True)
