@@ -53,15 +53,15 @@ def state_put(state_id):
     """
     updates specific State object by ID
     """
-    state_request = request.get_json(silent=True)
+    state_request = request.get_json()
     if not request.get_json():
         abort(400, description='Not a JSON')
     fetched = s.get(State, state_id)
     if not fetched:
         abort(404)
-    for key, val in state_request.items():
-        if key not in ["id", "created_at", "updated_at"]:
-            setattr(fetched, key, val)
+    for keys, vals in state_request.items():
+        if keys not in ["id", "created_at", "updated_at"]:
+            setattr(fetched, keys, vals)
     fetched.save()
     return jsonify(fetched.to_dict()), 200
 
