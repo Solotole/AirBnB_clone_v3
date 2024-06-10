@@ -8,7 +8,7 @@ classes = {"User": User}
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
-def getting_all_objects(self):
+def getting_all_user_objects(self):
     """ getting a list of all objects """
     dict_user = {}
     dict_user = storage.all(classes['User'])
@@ -43,7 +43,7 @@ def deleting_user_object(user_id):
 
 
 @app_views.route('/users/<user_id>', methods=['POST'], strict_slashes=False)
-def posting_new_object(amenity_id):
+def posting_user_object(amenity_id):
     """ posting of a new user data """
     user_object = request.get_json()
     if not request.get_json():
