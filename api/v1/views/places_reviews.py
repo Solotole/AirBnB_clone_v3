@@ -27,12 +27,11 @@ def retrieve_place_reviews(place_id):
     dictionary = {}
     dictionary = storage.get(classes['Place'], place_id)
     all_list = []
-    if dictionary:
-        for key in dictionary.reviews:
-            if key.place_id == place_id:
-                all_list.append(key.to_dict())
-    elif not dictionary:
+    if not dictionary:
         abort(404)
+    for key in dictionary.reviews:
+        if key.place_id == place_id:
+            all_list.append(key.to_dict())
     return jsonify(all_list)
 
 
