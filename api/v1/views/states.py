@@ -15,8 +15,9 @@ def define_state():
     """
     states = []
     states_obj = s.all(State)
-    for obj in states_obj.values():
-        states.append(obj.to_dict())
+    if states_obj:
+        for obj in states_obj.values():
+            states.append(obj.to_dict())
     return jsonify(states)
 
 
@@ -45,7 +46,8 @@ def state_by_id(state_id):
     fetched = s.get(State, state_id)
     if not fetched:
         abort(404)
-    return jsonify(fetched.to_dict())
+    if fetched:
+        return jsonify(fetched.to_dict())
 
 
 @app_views.route("/states/<state_id>",  methods=["PUT"], strict_slashes=False)
