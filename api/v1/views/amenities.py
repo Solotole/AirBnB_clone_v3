@@ -14,9 +14,8 @@ def getting_all_objects():
     dict_amenity = {}
     dict_amenity = storage.all(classes['Amenity'])
     all_amenity = []
-    if dict_amenity:
-        for key in dict_amenity.values():
-            all_amenity.append(key.to_dict())
+    for key in dict_amenity.values():
+        all_amenity.append(key.to_dict())
     return jsonify(all_amenity)
 
 
@@ -28,8 +27,7 @@ def retrieve_amenity(amenity_id):
     amenity_object = storage.get(classes['Amenity'], amenity_id)
     if not amenity_object:
         abort(404)
-    if amenity_object:
-        return jsonify(amenity_object.to_dict())
+    return jsonify(amenity_object.to_dict())
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
