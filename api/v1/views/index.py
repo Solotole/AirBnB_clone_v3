@@ -28,12 +28,11 @@ def status():
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def statistics():
     """ method to return count in dictionary form """
-    response = {
-            "amenities": storage.count(Amenity),
-            "cities": storage.count(City),
-            "places": storage.count(Place),
-            "reviews": storage.count(Review),
-            "states": storage.count(State),
-            "users": storage.count(User)
-            }
+    response = {}
+    response['amenities'] = storage.count(Amenity)
+    response['cities'] = storage.count(City)
+    response['places'] = storage.count(Place)
+    response['reviews'] = storage.count(Review)
+    response['states'] = storage.count(State)
+    response['users'] = storage.count(User)
     return jsonify(response)
