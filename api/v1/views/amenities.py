@@ -27,7 +27,8 @@ def retrieve_amenity(amenity_id):
     amenity_object = storage.get(classes['Amenity'], amenity_id)
     if not amenity_object:
         abort(404)
-    return jsonify(amenity_object.to_dict())
+    if amenity_object:
+        return jsonify(amenity_object.to_dict())
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -72,5 +73,5 @@ def put_amenity_object(amenity_id):
     for keys, values in amenity_object.items():
         if keys not in ignore_list:
             setattr(existing_object, keys, values)
-    storage.save()
+    existing_object.save()
     return jsonify(existing_object.to_dict()), 200
